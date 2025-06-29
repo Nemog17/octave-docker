@@ -31,4 +31,8 @@ COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 8080
-ENTRYPOINT ["gotty", "--permit-write", "--port", "8080", "--title-format", "Octave", "entrypoint.sh"]
+ENTRYPOINT ["gotty",
+           "--permit-arguments",      # 👈 habilita ?arg=
+           "--port", "8080",
+           "--title-format", "Octave",
+           "/usr/local/bin/entrypoint.sh"]
