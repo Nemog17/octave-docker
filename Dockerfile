@@ -1,21 +1,34 @@
-FROM ubuntu:25.04
+# octave-docker/Dockerfile
+FROM debian:bookworm-slim
 
-RUN apt-get update \
- && apt-get install -y --no-install-recommends \
-      octave \
-      gnuplot-nox \
-      ca-certificates \
- && rm -rf /var/lib/apt/lists/*
+# ------------------------------
+# 1) Sistema base + Octave
+# ------------------------------
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        octave gnuplot-nox ca-certificates curl && \
+    rm -rf /var/lib/apt/lists/*
+ENV GNUTERM=dumb
 
+# ------------------------------
+# 2) GoTTY (terminal web)
+# ------------------------------
 ARG GOTTY_VERSION=1.0.1
-ADD https://github.com/yudai/gotty/releases/download/v${GOTTY_VERSION}/gotty_linux_amd64.tar.gz /tmp/gotty.tar.gz
-RUN tar -xzf /tmp/gotty.tar.gz -C /tmp \
- && mv /tmp/gotty /usr/local/bin/ \
- && rm /tmp/gotty.tar.gz
+RUN curl -L https://github.com/yudai/gotty/releases/download/v${GOTTY_VERSION}/gotty_linux_amd64.tar.gz \
+        | tar -xz -C /usr/local/bin && \
+    chmod +x /usr/local/bin/gotty
 
-WORKDIR /home/octave
-COPY Longitud_Tuberia.m .
+# ------------------------------
+# 3) Ejercicios
+# ------------------------------
+WORKDIR /opt/exercises
+COPY *.m .
+
+# ------------------------------
+# 4) Script lanzador
+# ------------------------------
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 8080
-CMD ["gotty", "--permit-write", "--port", "8080", \
-      "bash", "-lc", "octave --persist Longitud_Tuberia.m 2>/dev/null"]
+ENTRYPOINT ["gotty", "--permit-write", "--port", "8080", "--title-format", "Octave", "entrypoint.sh"]
