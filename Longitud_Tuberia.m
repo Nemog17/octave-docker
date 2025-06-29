@@ -21,7 +21,9 @@ dlmwrite(tmp, [xv' yv'], ' ');
 cmd = sprintf([
     'gnuplot -e "set terminal dumb size 80,20; ', ...
     'set title \\"y(x)=0.5x^2\\"; ', ...
-    'plot ''%s'' using 1:2 with lines"'], tmp);
+    'set key off; ', ...                % ← desactiva la leyenda
+    'plot ''%s'' using 1:2 with lines notitle"'], tmp);
+
 
 fprintf('\nGráfica ASCII:\n');
 system(cmd);
