@@ -32,9 +32,9 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 8080
 ENTRYPOINT ["gotty",
-           "--permit-arguments",      \
-           "--permit-write",          \
-           "--port", "8080",          \
-           "--title-format", "Octave",\
-           "/usr/local/bin/entrypoint.sh"]
+            "--permit-arguments",
+            "--permit-write",
+            "--port", "8080",
+            "--title-format", "Octave",
+            "/usr/local/bin/entrypoint.sh"]
 
