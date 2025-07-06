@@ -25,7 +25,13 @@ WORKDIR /opt/exercises
 COPY *.m .
 
 # ------------------------------
-# 4) Script lanzador
+# 4) Archivos web
+# ------------------------------
+RUN mkdir -p /opt/octave-web
+COPY octave-web/ /opt/octave-web/
+
+# ------------------------------
+# 5) Script lanzador
 # ------------------------------
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh

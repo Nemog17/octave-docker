@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Octave Web</title>
+<style>
+ body { font-family: monospace; background: #000; color: #0f0; margin:0; }
+ #container { display:flex; height:100vh; }
+ #console { flex:1; display:flex; flex-direction:column; }
+ #output { flex:1; overflow:auto; white-space:pre-wrap; margin:0; padding:0.5em; }
+ #command-input { border: none; padding:0.5em; background:#000; color:#0f0; outline:none; }
+ #vars-panel { width:200px; background:#111; padding:0.5em; overflow:auto; }
+ ul { list-style:none; padding:0; margin:0; }
+</style>
+</head>
+<body>
+<div id="container">
+  <div id="console">
+    <pre id="output"></pre>
+    <input id="command-input" type="text" autocomplete="off" />
+  </div>
+  <div id="vars-panel"></div>
+</div>
+<script src="console.js"></script>
+</body>
+</html>
