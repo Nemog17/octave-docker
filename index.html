@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Octave Web</title>
+<style>
+body{margin:0;height:100vh;display:flex;font-family:monospace;background:#1e1e1e;color:#dcdcdc;}
+#console{flex:2;display:flex;flex-direction:column;border-right:1px solid #555;padding:10px;}
+#output{flex:1;overflow:auto;white-space:pre-wrap;background:#000;padding:5px;margin:0;}
+#command-input{border:none;padding:5px;background:#333;color:#dcdcdc;}
+#vars-panel{flex:1;padding:10px;overflow:auto;}
+#vars-panel h3{margin-top:0;}
+</style>
+</head>
+<body>
+<div id="console">
+<pre id="output"></pre>
+<input id="command-input" autocomplete="off" placeholder="Enter Octave command">
+</div>
+<div id="vars-panel">
+<h3>Variables</h3>
+<ul id="vars-list"></ul>
+</div>
+<script src="console.js"></script>
+</body>
+</html>

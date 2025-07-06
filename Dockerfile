@@ -36,7 +36,13 @@ COPY octave-web/ /opt/octave-web/
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
+# ------------------------------
+# 5) Interfaz web personalizada
+# ------------------------------
+RUN mkdir -p /opt/web
+COPY index.html console.js /opt/web/
+
 EXPOSE 8080
-ENTRYPOINT ["bash","-lc","exec gotty --permit-arguments --permit-write --index /opt/octave-web/index.html --port 8080 --title-format Octave /usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["bash","-lc","exec gotty --permit-arguments --permit-write --index /opt/web/index.html --port 8080 --title-format Octave /usr/local/bin/entrypoint.sh"]
 
 
