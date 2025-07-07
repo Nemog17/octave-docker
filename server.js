@@ -20,6 +20,9 @@ wss.on('connection', (ws) => {
     env: process.env
   });
 
+  // Adjust prompts to behave like Octave Online and disable paging
+  shell.write("PS1('>> '); PS2(''); more off;\n");
+
   shell.on('data', (data) => {
     ws.send(data);
   });
