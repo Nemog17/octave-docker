@@ -84,7 +84,6 @@ inputEl.addEventListener('keydown', e => {
     const cmd = inputEl.value;
     inputEl.value = '';
     ws.send(cmd + '\n');
-    setTimeout(sendVarRequest, 50);
   }
 });
 
