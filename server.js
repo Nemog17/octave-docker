@@ -22,13 +22,24 @@ wss.on('connection', (ws) => {
 
   // Adjust prompts to behave like Octave Online and disable paging
   shell.write("PS1('>> '); PS2(''); more off;\n");
+  shell.write('printf("<VARS>%s</VARS>\\n", strjoin(who(), ","));\n');
 
   shell.on('data', (data) => {
     ws.send(data);
   });
 
   ws.on('message', (msg) => {
-    shell.write(msg.toString());
+    const input = msg.toString();
+    shell.write(input);
+
+    const isVarCmd = input.startsWith('printf("<VARS>') || input.startsWith('printf("<VAL:');
+
+    if(!isVarCmd){
+      if(!input.endsWith('\n')){
+        shell.write('\n');
+      }
+      shell.write('printf("<VARS>%s</VARS>\\n", strjoin(who(), ","));\n');
+    }
   });
 
   ws.on('close', () => {
