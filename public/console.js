@@ -17,8 +17,9 @@ function updateVars(str){
   });
 }
 
-function sendVarRequest(){
-  ws.send("printf(\"<VARS>%s</VARS>\\n\", strjoin(who(), ","));\n");
+function sendVarRequest () {
+  // envía: 0printf("<VARS>%s</VARS>\n", strjoin(who(), ","));
+  ws.send('0printf("<VARS>%s</VARS>\\n", strjoin(who(), ","));\n');
 }
 
 function connect(){
