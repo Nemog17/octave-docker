@@ -28,7 +28,7 @@ COPY *.m .
 # 4) Archivos web
 # ------------------------------
 RUN mkdir -p /opt/octave-web
-COPY octave-web/ /opt/octave-web/
+COPY octave-web/* /opt/octave-web/
 
 # ------------------------------
 # 5) Script lanzador
