@@ -1,14 +1,24 @@
-# ---------- 1) build layer ----------
-    FROM node:20-bookworm AS builder
-    WORKDIR /srv/oo
-    
-    # Copiamos solo package.json y package-lock para cache npm
-    COPY oos-src/front/package*.json oos-src/front/
-    COPY oos-src/back/package*.json oos-src/back/
-    
-    # Instalamos dependencias front y back
-    RUN cd oos-src/front && npm ci && npm run build      \
-     && cd ../back && npm ci
+FROM node:18-bookworm AS builder
+
+# Herramientas para node-gyp
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential python3 make g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /srv/oo
+COPY oos-src/front/package*.json oos-src/front/
+COPY oos-src/back-master/package*.json  oos-src/back/
+
+# Instalar dependencias FRONT
+RUN cd oos-src/front \
+    && npm ci --legacy-peer-deps \
+    && npm run build
+
+# Instalar dependencias BACK
+RUN cd /srv/oo/oos-src/back \
+    && npm ci --legacy-peer-deps
+
     
     # Copiamos el resto del código (después de cachear deps)
     COPY oos-src/ ./oos-src/
