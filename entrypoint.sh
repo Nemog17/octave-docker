@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
-# Primer argumento que llega vía ?arg=<fichero.m>
-file="$1"
+set -e
 
-# Si viene solo el nombre, lo buscamos en /opt/exercises
-if [[ -n "$file" ]]; then
-  [[ -f "/opt/exercises/$file" ]] && file="/opt/exercises/$file"
-fi
+# 1. Arrancar Redis en background
+redis-server --daemonize yes --bind ${REDIS_BIND:-127.0.0.1}
+echo "🔄 Redis arrancado"
 
-if [[ -f "$file" ]]; then
-  exec bash -lc "octave --no-gui -q --persist \"$file\" 2>/dev/null"
-else
-  echo ">> No se recibió argumento ?arg=<script>.m válido – abriendo REPL"
-  exec bash -lc "octave --no-gui -q --persist"
-fi
+# 2. Arrancar oo-back en background
+NODE_ENV=production \
+node /srv/oo/back/app.js &
+echo "🔄 oo-back arrancado"
+
+# 3. Arrancar oo-front (proceso principal)
+echo "✅ Lanzando oo-front en puerto 8080..."
+NODE_ENV=production \
+node /srv/oo/front/dist/app.js --config /srv/oo/config.hjson
