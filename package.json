@@ -1,0 +1,14 @@
+{
+  "name": "octave-web",
+  "version": "1.0.0",
+  "description": "Simple Octave web terminal",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "ws": "^8.12.0",
+    "node-pty": "^0.10.1"
+  }
+}

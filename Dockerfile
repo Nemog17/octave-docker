@@ -1,52 +1,15 @@
-FROM node:18-bookworm AS builder
+FROM node:18-bookworm
 
-# Herramientas para node-gyp
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        build-essential python3 make g++ \
-    && rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends octave gnuplot && \
+    rm -rf /var/lib/apt/lists/*
 
-WORKDIR /srv/oo
-COPY oos-src/front/package*.json oos-src/front/
-COPY oos-src/back-master/package*.json  oos-src/back/
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
 
-# Instalar dependencias FRONT
-RUN cd oos-src/front \
-    && npm ci --legacy-peer-deps \
-    && npm run build
+COPY public ./public
+COPY server.js ./
 
-# Instalar dependencias BACK
-RUN cd /srv/oo/oos-src/back \
-    && npm ci --legacy-peer-deps
-
-    
-    # Copiamos el resto del código (después de cachear deps)
-    COPY oos-src/ ./oos-src/
-    
-    # ---------- 2) runtime layer ----------
-    FROM ubuntu:22.04
-    
-    # 1. GNU Octave + Redis + Node runtime
-    ENV DEBIAN_FRONTEND=noninteractive
-    RUN apt-get update && \
-        apt-get install -y --no-install-recommends \
-            octave          \
-            redis-server    \
-            nodejs npm      \
-            ca-certificates \
-        && rm -rf /var/lib/apt/lists/*
-    
-    # 2. Copiar artefactos construidos
-    WORKDIR /srv/oo
-    COPY --from=builder /srv/oo/oos-src/front/dist ./front/dist
-    COPY --from=builder /srv/oo/oos-src/back       ./back
-    COPY config.hjson ./config.hjson
-    
-    # 3. Ajustes mínimos
-    ENV REDIS_BIND=127.0.0.1
-    EXPOSE 8080
-    
-    # 4. Entrypoint
-    COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-    RUN chmod +x /usr/local/bin/entrypoint.sh
-    ENTRYPOINT ["entrypoint.sh"]
+EXPOSE 8080
+CMD ["npm", "start"]
