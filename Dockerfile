@@ -34,7 +34,7 @@
     
     # 3. Ajustes mínimos
     ENV REDIS_BIND=127.0.0.1
-    EXPOSE 8080            # oo-front escucha 8080
+    EXPOSE 8080
     
     # 4. Entrypoint
     COPY entrypoint.sh /usr/local/bin/entrypoint.sh
