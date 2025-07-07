@@ -41,7 +41,15 @@ wss.on('connection', (ws) => {
   });
 
   ws.on('close', () => {
-    shell.kill();
+    // Ask Octave to terminate gracefully before killing the PTY.
+    try {
+      shell.write('quit;\n');
+    } catch (e) {}
+    setTimeout(() => {
+      try {
+        shell.kill();
+      } catch (e) {}
+    }, 100);
   });
 });
 
