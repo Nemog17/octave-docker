@@ -14,15 +14,13 @@ app.get('/', (req, res) => {
 });
 
 wss.on('connection', (ws) => {
-  const shell = pty.spawn('octave', ['--silent', '--no-line-editing'], {
+  const shell = pty.spawn('octave', ['--silent', '--no-line-editing', '--eval', 'more off'], {
     cols: 80,
     rows: 24,
     env: process.env
   });
 
-  // Adjust prompts to behave like Octave Online and disable paging
-  shell.write("PS1('>> '); PS2(''); more off;\n");
-  shell.write('printf("<VARS>%s</VARS>\\n", strjoin(who(), ","));\n');
+  // Default prompts are preserved
 
   shell.on('data', (data) => {
     ws.send(data);
