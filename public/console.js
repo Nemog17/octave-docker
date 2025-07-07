@@ -50,10 +50,7 @@ function connect(){
   const loc = window.location;
   const wsUrl = (loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host;
   ws = new WebSocket(wsUrl);
-  ws.addEventListener('open', () => {
-    sendVarRequest();
-  });
-    ws.addEventListener('message', evt => {
+  ws.addEventListener('message', evt => {
       const text = evt.data;
       if(text.startsWith('<VARS>') && text.includes('</VARS>')){
         const vars = text.substring(6, text.indexOf('</VARS>'));
