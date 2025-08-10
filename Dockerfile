@@ -31,6 +31,7 @@ COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 8080
+# Ejecutar Octave en modo silencioso para evitar el mensaje inicial
 CMD ["gotty", "--permit-write", "--port", "8080", \
-      "bash", "-lc", "octave --persist Longitud_Tuberia.m 2>/dev/null"]
+      "bash", "-lc", "octave --no-gui -q --persist Longitud_Tuberia.m 2>/dev/null"]
 
