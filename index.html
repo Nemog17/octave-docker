@@ -6,19 +6,6 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <div class="terminal-panel">
-      <div id="output"></div>
-      <form id="input-form">
-        <span class="prompt">octave&gt; </span>
-        <input type="text" id="input" autocomplete="off" autofocus />
-      </form>
-    </div>
-    <div class="variables-panel">
-      <h2>Variables</h2>
-      <div id="variables"></div>
-    </div>
-  </div>
-  <script src="app.js"></script>
+  <iframe id="terminal" src="http://localhost:8080" title="Octave Terminal"></iframe>
 </body>
 </html>
