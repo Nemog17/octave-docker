@@ -24,12 +24,6 @@ RUN curl -L https://github.com/yudai/gotty/releases/download/v${GOTTY_VERSION}/g
 WORKDIR /opt/exercises
 COPY *.m .
 
-# ------------------------------
-# 4) Script lanzador
-# ------------------------------
-COPY entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
 EXPOSE 8080
 # Ejecutar Octave en modo silencioso para evitar el mensaje inicial
 CMD ["gotty", "--permit-write", "--port", "8080", \
