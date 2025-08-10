@@ -1,0 +1,66 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: monospace;
+}
+.container {
+  display: flex;
+  height: 100%;
+}
+.terminal-panel {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  color: #fff;
+}
+#output {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+#input-form {
+  display: flex;
+  padding: 5px;
+  background: #111;
+}
+#input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #0f0;
+  outline: none;
+  font-family: inherit;
+}
+.prompt {
+  color: #0f0;
+  margin-right: 5px;
+}
+.variables-panel {
+  flex: 1;
+  background: #2b2b2b;
+  color: #fff;
+  padding: 10px;
+  overflow-y: auto;
+}
+.variables-panel h2 {
+  margin-top: 0;
+}
+.variable {
+  margin-bottom: 5px;
+}
+.variable .name {
+  color: #fff;
+}
+.variable .value {
+  color: #0af;
+}
+@media (max-width: 600px) {
+  .container {
+    flex-direction: column;
+  }
+  .variables-panel {
+    order: -1;
+    flex: none;
+  }
+}
