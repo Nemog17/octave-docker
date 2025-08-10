@@ -6,7 +6,7 @@ FROM debian:bookworm-slim
 # ------------------------------
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        octave gnuplot-nox ca-certificates curl && \
+        octave gnuplot-nox ca-certificates curl python3 && \
     rm -rf /var/lib/apt/lists/*
 ENV GNUTERM=dumb
 
@@ -19,13 +19,21 @@ RUN curl -L https://github.com/yudai/gotty/releases/download/v${GOTTY_VERSION}/g
     chmod +x /usr/local/bin/gotty
 
 # ------------------------------
-# 3) Ejercicios
+# 3) Archivos de ejercicios
 # ------------------------------
 WORKDIR /opt/exercises
 COPY *.m .
 
-EXPOSE 8080
-# Ejecutar Octave en modo silencioso para evitar el mensaje inicial
-CMD ["gotty", "--permit-write", "--port", "8080", \
-      "bash", "-lc", "octave --no-gui -q --persist Longitud_Tuberia.m 2>/dev/null"]
+# ------------------------------
+# 4) Archivos web estáticos
+# ------------------------------
+WORKDIR /opt/web
+COPY index.html script.js styles.css ./
+
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
+EXPOSE 80 8080
+
+CMD ["/usr/local/bin/start.sh"]
 
