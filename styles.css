@@ -21,6 +21,7 @@ body {
   flex: 1;
   border: none;
   background: #000;
+  pointer-events: none; /* evita interacción directa con el iframe */
 }
 
 #command-bar {
