@@ -25,18 +25,11 @@ WORKDIR /opt/exercises
 COPY *.m .
 
 # ------------------------------
-# 4) Archivos web
-# ------------------------------
-RUN mkdir -p /opt/octave-web
-COPY octave-web/* /opt/octave-web/
-
-# ------------------------------
-# 5) Script lanzador
+# 4) Script lanzador
 # ------------------------------
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 8080
-ENTRYPOINT ["bash","-lc","exec gotty --permit-arguments --permit-write --index /opt/octave-web/index.html --port 8080 --title-format Octave /usr/local/bin/entrypoint.sh"]
-
+ENTRYPOINT ["bash","-lc","exec gotty --permit-arguments --permit-write --port 8080 --title-format Octave /usr/local/bin/entrypoint.sh"]
 
