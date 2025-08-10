@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Octave Web Terminal</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <iframe id="terminal" src="http://localhost:8080" title="Octave Terminal"></iframe>
+  <div id="left-panel">
+    <iframe id="terminal" src="http://localhost:8080" title="Octave Terminal"></iframe>
+    <div id="command-bar">
+      <input id="command-input" type="text" placeholder="Escribe un comando y presiona Enter" />
+    </div>
+  </div>
+  <aside id="variables-panel">
+    <h2>Variables</h2>
+    <ul id="variables-list"></ul>
+  </aside>
+  <script src="script.js"></script>
 </body>
 </html>
