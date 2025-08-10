@@ -31,5 +31,6 @@ COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 8080
-ENTRYPOINT ["bash","-lc","exec gotty --permit-arguments --permit-write --port 8080 --title-format Octave /usr/local/bin/entrypoint.sh"]
+CMD ["gotty", "--permit-write", "--port", "8080", \
+      "bash", "-lc", "octave --persist Longitud_Tuberia.m 2>/dev/null"]
 
