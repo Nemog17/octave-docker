@@ -29,3 +29,5 @@ system(cmd);
 delete(tmp);
 
 fprintf('\nLongitud de arco en [%0.2f,%0.2f] ≈ %0.4f\n', a, b, arc_length);
+exit(0);
+
