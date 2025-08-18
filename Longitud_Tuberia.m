@@ -6,7 +6,10 @@ dy_dx  = @(x) x;
 
 a = input('Ingrese el límite inferior (a): ');
 b = input('Ingrese el límite superior (b): ');
-if a >= b, error('a debe ser < b'); end
+if a >= b
+  fprintf(2, 'Error: a debe ser < b\n');
+  return;
+end
 
 integrand   = @(x) sqrt(1 + (dy_dx(x)).^2);
 arc_length = integral(integrand, a, b);
@@ -29,5 +32,4 @@ system(cmd);
 delete(tmp);
 
 fprintf('\nLongitud de arco en [%0.2f,%0.2f] ≈ %0.4f\n', a, b, arc_length);
-exit(0);
 
