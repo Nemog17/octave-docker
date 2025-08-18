@@ -1,5 +1,5 @@
 %% Longitud_Tuberia.m - ASCII con gnuplot
-graphics_toolkit('gnuplot');
+orig_term = getenv('GNUTERM');
 setenv('GNUTERM','dumb');
 
 y      = @(x) 0.5*x.^2;
@@ -26,7 +26,20 @@ cmd = sprintf([
 
 
 fprintf('\nGráfica ASCII:\n');
-system(cmd);
-delete(tmp);
+[status, ~] = system(cmd);
+if status != 0
+  warning('gnuplot command failed');
+end
+if exist(tmp, 'file')
+  try
+    delete(tmp);
+  catch
+  end
+end
 
 fprintf('\nLongitud de arco en [%0.2f,%0.2f] ≈ %0.4f\n', a, b, arc_length);
+if isempty(orig_term)
+  setenv('GNUTERM', '');
+else
+  setenv('GNUTERM', orig_term);
+end
