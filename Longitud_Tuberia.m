@@ -39,14 +39,14 @@ while true
   end
 
   eps = 1e-6;
-  dy_dx = @(x) (y(x + eps) - y(x - eps)) ./ (2 * eps);
+  dy_dx = @(x) (arrayfun(y, x + eps) - arrayfun(y, x - eps)) ./ (2 * eps);
   integrand = @(x) sqrt(1 + (dy_dx(x)).^2);
   arc_length = integral(integrand, a, b);
 
   % Gráfica ASCII con ejes simples
   nx = 80; ny = 20;
   xv = linspace(a, b, nx);
-  yv = y(xv);
+  yv = arrayfun(y, xv);
   ymin = min(yv); ymax = max(yv);
   scale = ymax - ymin;
   if scale == 0
