@@ -1,13 +1,24 @@
 %% Longitud_Tuberia.m - ASCII sin gnuplot
-% Calcula la longitud de arco de y(x) = 0.5*x.^2 en [a,b]
-% y muestra una gráfica ASCII sin usar gnuplot
-
-% Funciones base
-y      = @(x) 0.5*x.^2;
-dy_dx  = @(x) x;
+% Calcula la longitud de arco de y(x) definida por el usuario en [a,b]
+% y muestra una gráfica ASCII sin usar gnuplot. La derivada se estima
+% numéricamente con diferencias finitas.
 
 while true
-  a_in = input('Ingrese el límite inferior (a, vacío para salir): ', 's');
+  func_str = input('Ingrese la función y(x) (vacío para salir): ', 's');
+  if isempty(func_str)
+    break;
+  end
+
+  try
+    y = str2func(["@(x) " func_str]);
+    % Prueba de evaluación para validar la función
+    y(0);
+  catch
+    fprintf('Función inválida. Intente de nuevo.\n\n');
+    continue;
+  end
+
+  a_in = input('Ingrese el límite inferior (a): ', 's');
   if isempty(a_in)
     break;
   end
@@ -27,7 +38,9 @@ while true
     continue;
   end
 
-  integrand   = @(x) sqrt(1 + (dy_dx(x)).^2);
+  eps = 1e-6;
+  dy_dx = @(x) (y(x + eps) - y(x - eps)) ./ (2 * eps);
+  integrand = @(x) sqrt(1 + (dy_dx(x)).^2);
   arc_length = integral(integrand, a, b);
 
   % Gráfica ASCII con ejes simples
@@ -35,9 +48,13 @@ while true
   xv = linspace(a, b, nx);
   yv = y(xv);
   ymin = min(yv); ymax = max(yv);
+  scale = ymax - ymin;
+  if scale == 0
+    scale = 1;
+  end
   canvas = repmat(' ', ny + 1, nx + 1); % espacio extra para los ejes
   for idx = 1:nx
-    row = round((yv(idx) - ymin)/(ymax - ymin)*(ny - 1)) + 1;
+    row = round((yv(idx) - ymin)/scale*(ny - 1)) + 1;
     col = idx + 1;                 % desplazar por eje Y
     canvas(ny - row + 1, col) = '*';
   end
