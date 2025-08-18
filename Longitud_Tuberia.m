@@ -22,8 +22,10 @@ for idx = 1:nx
   row = round((yv(idx) - ymin)/(ymax - ymin)*(ny-1)) + 1;
   canvas(ny - row + 1, idx) = '*';
 end
-
-disp(char(canvas));
+% Mostrar la gráfica conservando los espacios en blanco
+for r = 1:ny
+  fprintf('%s\n', canvas(r, :));
+end
 
 fprintf('\nLongitud de arco en [%0.2f,%0.2f] ≈ %0.4f\n', a, b, arc_length);
 
