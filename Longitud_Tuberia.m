@@ -1,5 +1,4 @@
 %% Longitud_Tuberia.m - ASCII con gnuplot
-graphics_toolkit('gnuplot');
 setenv('GNUTERM','dumb');
 
 y      = @(x) 0.5*x.^2;
