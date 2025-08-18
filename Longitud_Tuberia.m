@@ -1,6 +1,6 @@
-%% Longitud_Tuberia.m - ASCII con gnuplot
-graphics_toolkit('gnuplot');
-setenv('GNUTERM','dumb');
+%% Longitud_Tuberia.m - ASCII sin gnuplot
+% Calcula la longitud de arco de y(x) = 0.5*x.^2 en [a,b]
+% y muestra una gráfica ASCII sin usar gnuplot
 
 y      = @(x) 0.5*x.^2;
 dy_dx  = @(x) x;
@@ -12,21 +12,18 @@ if a >= b, error('a debe ser < b'); end
 integrand   = @(x) sqrt(1 + (dy_dx(x)).^2);
 arc_length = integral(integrand, a, b);
 
-xv = linspace(a,b,80);
+% Gráfica ASCII simple
+nx = 80; ny = 20;
+xv = linspace(a, b, nx);
 yv = y(xv);
+ymin = min(yv); ymax = max(yv);
+canvas = repmat(' ', ny, nx);
+for idx = 1:nx
+  row = round((yv(idx) - ymin)/(ymax - ymin)*(ny-1)) + 1;
+  canvas(ny - row + 1, idx) = '*';
+end
 
-tmp = [tempname() '.dat'];
-dlmwrite(tmp, [xv' yv'], ' ');
-
-cmd = sprintf([
-    'gnuplot -e "set terminal dumb size 80,20; ', ...
-    'set title \\"y(x)=0.5x^2\\"; ', ...
-    'set key off; ', ...                % ← desactiva la leyenda
-    'plot ''%s'' using 1:2 with lines notitle"'], tmp);
-
-
-fprintf('\nGráfica ASCII:\n');
-system(cmd);
-delete(tmp);
+disp(char(canvas));
 
 fprintf('\nLongitud de arco en [%0.2f,%0.2f] ≈ %0.4f\n', a, b, arc_length);
+
