@@ -1,5 +1,5 @@
-%% Longitud_Tuberia.m - ASCII con gnuplot (sin aviso al salir)
-more off;                           % ⇐ evita que el pager interfiera al salir
+%% Longitud_Tuberia.m - ASCII con gnuplot (sin errores de comillas ni aviso)
+more off;                           % desactiva el pager de Octave
 setenv('GNUTERM','dumb');           % terminal ASCII para gnuplot
 
 y     = @(x) 0.5*x.^2;
@@ -18,26 +18,32 @@ arc_length  = integral(integrand, a, b);
 xv = linspace(a,b,80);
 yv = y(xv);
 
-% Guardar datos con I/O básico (robusto en Octave/MATLAB)
-tmp = [tempname() '.dat'];
-fid = fopen(tmp,'w');
+% --- guardar datos en temporal ---
+datafile = [tempname() '.dat'];
+fid = fopen(datafile,'w');
 fprintf(fid,'%.12g %.12g\n',[xv(:) yv(:)].');
 fclose(fid);
 
-% Comillas dobles alrededor de la ruta (mejor en Windows)
-gp = sprintf(['set terminal dumb size 80,20; ', ...
-              'set title "y(x)=0.5x^2"; ', ...
-              'set key off; ', ...
-              'plot "%s" using 1:2 with lines notitle'], tmp);
-cmd = sprintf('gnuplot -e "%s"', gp);
+% --- crear script de gnuplot en temporal ---
+gpscript = [tempname() '.gp'];
+fgp = fopen(gpscript,'w');
+fprintf(fgp, 'set terminal dumb size 80,20\n');
+fprintf(fgp, 'set title "y(x)=0.5x^2"\n');
+fprintf(fgp, 'set key off\n');
+fprintf(fgp, 'plot "%s" using 1:2 with lines notitle\n', datafile);
+fclose(fgp);
 
+% --- ejecutar gnuplot y capturar la salida ---
 fprintf('\nGráfica ASCII:\n');
-[status, cmdout] = system(cmd);     % ⇐ capturo la salida en vez de escribir directo
+[status, cmdout] = system(sprintf('gnuplot "%s"', gpscript));
 if status == 0
   fprintf('%s\n', cmdout);
 else
   warning('gnuplot devolvió estado %d.\n%s', status, cmdout);
 end
-delete(tmp);
+
+% --- limpiar temporales ---
+if exist(gpscript,'file'), delete(gpscript); end
+if exist(datafile,'file'), delete(datafile); end
 
 fprintf('\nLongitud de arco en [%0.2f,%0.2f] ≈ %0.4f\n', a, b, arc_length);
